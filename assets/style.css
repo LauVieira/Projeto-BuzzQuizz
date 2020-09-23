@@ -1,11 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,400;1,500&display=swap');
-/* input[type="text"] { */
+/* 
+
+input[type="text"] { 
+    
+Criar variável para armazenar 60px?    
+    
+*/
 
 
 body {
     font-family: 'Roboto', sans-serif;
     background: #FFF;
     color: #232438;
+    display: flex;
+    justify-content: center;
 }
 
 
@@ -29,7 +37,6 @@ body {
 
 .telaDeLogin {
     /* display: flex; */
-    z-index: 2;
     display: none;
     height: 100vw;
     background: #FFF;
@@ -74,11 +81,16 @@ body {
     color: #FFF;
 }
 
+.desabilitarBotao {
+    pointer-events: none;
+  } 
+
 
 /*    -----------                TELA DE QUIZZES                -----------    */
 
 .telaDeQuizzes {
-    display: flex;
+    /* display: flex; */
+    display: none;
     justify-content: center;
 }
 
@@ -89,7 +101,7 @@ body {
     flex-wrap: wrap;
 }
 
-.telaDeQuizzes button,a {
+.telaDeQuizzes button,article {
     width: 200px;
     height: 225px;
     margin: 10px;
@@ -105,7 +117,7 @@ body {
     text-align: center;
 }
 
-.telaDeQuizzes a {
+.telaDeQuizzes article {
     background: #df9938;
 }
 
@@ -124,4 +136,152 @@ body {
 .telaDeQuizzes ion-icon {
     font-size: 45px;
     margin-bottom: 10px;
+}
+
+
+
+
+/*    -----------                TELA DE CRIAÇÃO DE QUIZZES                -----------    */
+
+.telaDeCriacao {
+    /* display: flex; */
+    flex-direction: column;
+    display: none;
+    width: 650px;
+    margin-top: 60px;
+    padding: 60px 0;
+}
+
+.telaDeCriacao input{
+    display: block;
+    background: #FFF;
+    margin: 3px;
+    height: 30px;
+    border-radius: 5px;
+    padding-left: 5px;
+    width: 100%;
+}
+
+.telaDeCriacao button {
+    width: 100%;
+    background: #3b3c5a;
+    color: #FFF;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.telaDeCriacao p {
+    color: #df9938;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 6px 3px;
+}
+
+.caixaDePerguntas,.caixaDeNiveis {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 60px;
+}
+
+.tituloQuizz {
+    display: block;
+    height: 40px;
+    border: solid 1px #dedfdc;
+}
+
+.opcoes {
+    display: flex;
+    width: 100%;
+}
+.opcoes div {
+    width: 100%;
+    margin-right: 3px;
+}
+
+.niveis {
+    display: flex;
+    flex-direction: column;
+}
+
+.niveis, .perguntasRespostas {
+    background: #dedfdc;
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.telaDeCriacao ion-icon {
+    font-size: 35px;
+    color: #df9938;
+}
+
+.porcentagemNivel {
+    display: flex;
+    width: 100%;
+}
+
+
+
+
+
+
+/*    -----------                TELA DE PERGUNTAS                -----------    */
+
+.telaDePerguntas {
+    width: 710px;
+    margin-top: 150px;
+    counter-reset: numeroPergunta;                      /* <<<<<<<<<<<<<<<< */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   
+}
+
+.telaDePerguntas h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.telaDePerguntas h2 {
+    width: 100%;
+    font-size: 30px;
+    padding: 40px;
+    margin: 20px 0;
+    background: #df9938;
+}
+.telaDePerguntas h2::before {
+    counter-increment: numeroPergunta;                   /* Increment the value of section counter by 1 */
+    content: counter(numeroPergunta) ". "; 
+}
+
+.opcoes {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.telaDePerguntas figure {
+    width: 350px;
+    height: 240px;
+    background: #dedfdc;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+figure img{
+    width: 100%;
+}
+figcaption {
+    font-size: 25px;
+    padding: 20px 10px;
+}
+
+.respostaCerta {
+    background: #348a5d;
+}
+.respostaErrada {
+    background: #ad2c34;
 }
