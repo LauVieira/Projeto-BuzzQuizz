@@ -37,7 +37,7 @@ body {
 
 .telaDeLogin {
     /* display: flex; */
-    display: none;
+    display: flex;
     height: 100vw;
     background: #FFF;
     flex-direction: column;
@@ -152,8 +152,7 @@ body {
     padding: 60px 0;
 }
 
-.telaDeCriacao input{
-    display: block;
+.telaDeCriacao input {
     background: #FFF;
     margin: 3px;
     height: 30px;
@@ -196,7 +195,6 @@ body {
     width: 100%;
 }
 .opcoes div {
-    width: 100%;
     margin-right: 3px;
 }
 
@@ -234,7 +232,7 @@ body {
     width: 710px;
     margin-top: 150px;
     counter-reset: numeroPergunta;                      /* <<<<<<<<<<<<<<<< */
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;   
 }
@@ -256,7 +254,7 @@ body {
     content: counter(numeroPergunta) ". "; 
 }
 
-.opcoes {
+.telaDePerguntas .opcoes {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -266,22 +264,25 @@ body {
 .telaDePerguntas figure {
     width: 350px;
     height: 240px;
-    background: #dedfdc;
     margin-bottom: 10px;
     border-radius: 10px;
     overflow: hidden;
 }
-figure img{
-    width: 100%;
+figure img {
+    width: 350px;
+    height: 175px;
 }
 figcaption {
     font-size: 25px;
     padding: 20px 10px;
 }
 
-.respostaCerta {
+.correta {
     background: #348a5d;
 }
-.respostaErrada {
+.errada {
     background: #ad2c34;
+}
+.neutra {
+    background: #dedfdc;
 }

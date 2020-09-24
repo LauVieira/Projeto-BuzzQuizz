@@ -31,7 +31,7 @@
 
         <div class="caixaDeQuizzes">
 
-            <button onclick="adicionarQuizz()"> 
+            <button onclick="criarQuizz()"> 
                 <span>Novo Quizz</span>
                 <ion-icon name="add-circle-sharp"></ion-icon>
             </button>
@@ -53,36 +53,37 @@
 
         <header class="headerFixo">BuzzQuizz</header>
 
-        <div class="caixaDePerguntas">
+        <input class="tituloQuizz" placeholder="Digite o título do seu quizz"></input>
 
-            <input class="tituloQuizz" placeholder="Digite o título do seu quizz"></input>
+        <div class="caixaDePerguntas">
 
             <div class="perguntasRespostas">
 
                 <p>Pergunta 1</p>
-                <input placeholder="Digite a pergunta">
+
+                <input placeholder="Digite a pergunta" class="pergunta"></input>
 
                 <div class="opcoes">
 
                     <div class="respostas">
-                        <input placeholder="Digite a resposta correta"></input>
-                        <input placeholder="Digite uma resposta errada 1"></input>
-                        <input placeholder="Digite uma resposta errada 2"></input>
-                        <input placeholder="Digite uma resposta errada 3"></input>
+                        <input placeholder="Digite a resposta correta" class="correta"></input>
+                        <input placeholder="Digite uma resposta errada 1" class="errada"></input>
+                        <input placeholder="Digite uma resposta errada 2" class="errada"></input>
+                        <input placeholder="Digite uma resposta errada 3" class="errada"></input>
                     </div>
 
                     <div class="imagens">
-                        <input placeholder="Link para a imagem correta"></input>
-                        <input placeholder="Link para a imagem errada 1"></input>
-                        <input placeholder="Link para a imagem errada 2"></input>
-                        <input placeholder="Link para a imagem errada 3"></input>
+                        <input placeholder="Link para a imagem correta" class="correta"></input>
+                        <input placeholder="Link para a imagem errada 1" class="errada"></input>
+                        <input placeholder="Link para a imagem errada 2" class="errada"></input>
+                        <input placeholder="Link para a imagem errada 3" class="errada"></input>
                     </div>
 
                 </div>
 
             </div>
 
-            <span><ion-icon name="add-circle-sharp"></ion-icon></span>
+            <span onclick="adicionarPergunta()"><ion-icon name="add-circle-sharp"></ion-icon></span>
 
         </div>
 
@@ -104,12 +105,12 @@
     
             </div>
 
-            <span><ion-icon name="add-circle-sharp"></ion-icon></span>
+            <span onclick="adicionarNivel()"><ion-icon name="add-circle-sharp"></ion-icon></span>
 
         </div>
         
 
-        <button>PUBLICAR</button>
+        <button onclick="adicionarQuizz()">PUBLICAR</button>
 
 
     </section>
@@ -130,22 +131,22 @@
 
                 <figure>
                     <img src="jovem.jpg">
-                    <figcaption class="respostaCerta">Teste</figcaption>
+                    <figcaption class="correta neutra">Teste</figcaption>
                 </figure>
 
                 <figure>
                     <img src="jovem.jpg">
-                    <figcaption class="respostaErrada">Teste</figcaption>
+                    <figcaption class="errada neutra">Teste</figcaption>
                 </figure>
 
                 <figure>
                     <img src="jovem.jpg">
-                    <figcaption class="respostaErrada">Teste</figcaption>
+                    <figcaption class="errada neutra">Teste</figcaption>
                 </figure>
 
                 <figure>
                     <img src="jovem.jpg">
-                    <figcaption class="respostaErrada">Teste</figcaption>
+                    <figcaption class="errada neutra">Teste</figcaption>
                 </figure>
 
             </div>
