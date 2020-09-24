@@ -3,6 +3,8 @@ var listaDePerguntas = [];
 var listaDeNiveis = [];
 var listaDoServidor = [];      //precisa ser global?
 var quizzDaVez;
+var indicePergunta = 3;
+var somaDePontos = 0;
 
 
 //     ----->>>>>     TELA DE LOGIN
@@ -164,7 +166,47 @@ function gerarQuizz () {
         elemento.innerHTML = renderizarPerguntas(i);                               // MELHORAR ISSO MANDANDO A LISTA DE PERGUNTAS NO INDICE
         telaDePerguntas.appendChild(elemento);
     }
+    var primeiraPergunta = telaDePerguntas.querySelector(".perguntaAtual:nth-child(3)");           //melhorar esse índice pra uma variável
+    primeiraPergunta.style.display="flex";
 }
+
+
+
+function alternativaSelecionada (elementoFigure) {
+    revelarCores(elementoFigure);
+    checarPonto(elementoFigure);
+    setTimeout(proximaPergunta,2000);    
+}
+
+function revelarCores (elementoFigure) {
+    var alternativas = elementoFigure.parentNode;    //pegando a div mãe
+    console.log(alternativas);
+    removerClick = alternativas.querySelectorAll("figure");
+    alternativas = alternativas.querySelectorAll("figure figcaption");
+    for (var i = 0; i < 4; i++) {
+        alternativas[i].classList.remove("neutra");
+        removerClick[i].removeAttribute("onclick");
+    }
+}
+
+function checarPonto (elementoFigure) {
+    var classe = elementoFigure.querySelector("figcaption");
+    classe = classe.className;
+    if (classe === "correta") somaDePontos++;
+}
+
+
+function proximaPergunta () {
+    var indiceMaximo = quizzDaVez.data.perguntas.length + 2;
+    if (indicePergunta < indiceMaximo) {
+        var indiceSai = indicePergunta;
+        indicePergunta++;
+        mudarDeTela(".perguntaAtual:nth-child(" + indiceSai + ")",".perguntaAtual:nth-child(" + indicePergunta + ")");
+    }
+    //e se for a última pergunta?? else finalizar quizz??
+}
+
+
 
 
 /*
@@ -179,7 +221,7 @@ E DAR APPEND AQUI: <section class="telaDePerguntas">
 
     <div class="alternativas">
 
-        CRIAR ESSE ARRAY ****** E CONCATENAR AQUI
+        ARRAY DE OPÇÕES
 
     </div>
 
@@ -265,8 +307,8 @@ function renderizarImagens (i) {       // vou receber índice ou a lista de uma 
     var htmlImagens = "";
     embaralharAlternativas(i);
     for (var j = 0; j < 4; j++) {
-        htmlImagens += "<figure><img src=" + quizzDaVez.data.perguntas[i].opcoes[j].imagem + ">";
-        htmlImagens += "<figcaption class=neutra " + quizzDaVez.data.perguntas[i].opcoes[j].classe + ">";
+        htmlImagens += "<figure onclick='alternativaSelecionada(this)'><img src=" + quizzDaVez.data.perguntas[i].opcoes[j].imagem + ">";
+        htmlImagens += "<figcaption class='neutra " + quizzDaVez.data.perguntas[i].opcoes[j].classe + "' >";
         htmlImagens += quizzDaVez.data.perguntas[i].opcoes[j].resposta;
         htmlImagens += "</figcaption></figure>";
     }
@@ -275,7 +317,8 @@ function renderizarImagens (i) {       // vou receber índice ou a lista de uma 
 
 function renderizarPerguntas (i) {
     var htmlPerguntas = "";
-    htmlPerguntas += "<h2>" + quizzDaVez.data.perguntas[i].titulo + "</h2>";
+    var indiceH2 = i+1;
+    htmlPerguntas += "<h2>" + indiceH2 + ". " + quizzDaVez.data.perguntas[i].titulo + "</h2>";
     htmlPerguntas += "<div class='alternativas'>";
     htmlPerguntas += renderizarImagens (i);
     htmlPerguntas += "</div>";

@@ -1,10 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
 /* 
 
 input[type="text"] { 
     
 Criar variável para armazenar 60px?    
     
+
+font-family: 'Merriweather', serif;
+
+
+
 */
 
 
@@ -32,12 +39,14 @@ body {
     padding: 14px;
 }
 
+
+
 /*    -----------                TELA DE LOGIN                -----------    */
 
 
 .telaDeLogin {
     /* display: flex; */
-    display: none;
+    display: flex;
     height: 100vw;
     background: #FFF;
     flex-direction: column;
@@ -84,6 +93,7 @@ body {
 .desabilitarBotao {
     pointer-events: none;
   } 
+
 
 
 /*    -----------                TELA DE QUIZZES                -----------    */
@@ -223,15 +233,11 @@ body {
 
 
 
-
-
-
 /*    -----------                TELA DE PERGUNTAS                -----------    */
 
 .telaDePerguntas {
     width: 710px;
     margin-top: 150px;
-    counter-reset: numeroPergunta;                      /* <<<<<<<<<<<<<<<< */
     display: none;
     flex-direction: column;
     justify-content: center;   
@@ -248,10 +254,6 @@ body {
     padding: 40px;
     margin: 20px 0;
     background: #df9938;
-}
-.telaDePerguntas h2::before {
-    counter-increment: numeroPergunta;                   /* Increment the value of section counter by 1 */
-    content: counter(numeroPergunta) ". "; 
 }
 
 .alternativas {
@@ -289,19 +291,19 @@ figcaption {
 
 .perguntaAtual {
     margin-bottom: 20px;
+    display: none;
+    flex-direction: column;
 }
 
 
 
-
-
-
+/*    -----------                TELA DE RESULTADOS                -----------    */
 
 
 .telaDeResultado {
     width: 600px;
     margin-top: 150px;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center; 
 }
