@@ -37,7 +37,7 @@ body {
 
 .telaDeLogin {
     /* display: flex; */
-    display: flex;
+    display: none;
     height: 100vw;
     background: #FFF;
     flex-direction: column;
@@ -254,7 +254,7 @@ body {
     content: counter(numeroPergunta) ". "; 
 }
 
-.telaDePerguntas .opcoes {
+.alternativas {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -286,3 +286,54 @@ figcaption {
 .neutra {
     background: #dedfdc;
 }
+
+.perguntaAtual {
+    margin-bottom: 20px;
+}
+
+
+
+
+
+
+
+
+.telaDeResultado {
+    width: 600px;
+    margin-top: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+}
+
+
+.caixaDescricaoResultado {
+    display: flex;
+}
+
+.telaDeResultado h1 {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.telaDeResultado h2 {
+    width: 100%;
+    font-size: 30px;
+    padding: 40px;
+    margin: 20px 0;
+    background: #df9938;
+}
+
+.telaDeResultado h3 {
+    font-size: 26px;
+    margin-bottom: 15px;
+}
+
+.telaDeResultado p {
+    font-size: 22px;
+}
+
+.textoResultado,.telaDeResultado img {
+    width: 50%;
+}
+

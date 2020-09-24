@@ -1,7 +1,8 @@
 var tokenUsuario
 var listaDePerguntas = [];
 var listaDeNiveis = [];
-
+var listaDoServidor = [];      //precisa ser global?
+var quizzDaVez;
 
 
 //     ----->>>>>     TELA DE LOGIN
@@ -36,8 +37,8 @@ function desabilitarHabilitarBotao () {
 
 function processarUsuario (resposta) {
     tokenUsuario = resposta.data.token;
-    console.log(tokenUsuario);
     mudarDeTela(".telaDeLogin",".telaDeQuizzes");
+    pedirQuizzes();
 }
 
 
@@ -47,9 +48,42 @@ function criarQuizz () {
     mudarDeTela(".telaDeQuizzes",".telaDeCriacao");
 }
 
+function pedirQuizzes () {
+    var header = configurarHeader();
+    var requisicao = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v1/buzzquizz/quizzes', header);
+    requisicao.catch(exibirErro).then(carregarQuizzes);
+}
+
+function carregarQuizzes (resposta) {
+    listaDoServidor = resposta.data;
+    var caixaDeQuizzes = document.querySelector(".caixaDeQuizzes");
+    for (var i = 0; i < resposta.data.length; i++) {
+        var textoTitulo = resposta.data[i].title;
+        caixaDeQuizzes.appendChild(renderizarListaDeQuizzes(textoTitulo));     // DEIXAR MAIS CURTO OU FAZER MAIS LEGÍVEL?
+    }
+}
+
+
+function carregarQuizz (quizz) {
+    var indiceQuizz = encontrarIndice(quizz.innerText);
+    quizzDaVez = listaDoServidor[indiceQuizz];
+    gerarQuizz();
+    mudarDeTela(".telaDeQuizzes",".telaDePerguntas");    
+}
+
+
+function encontrarIndice (titulo) {
+    for (var i = 0; i < listaDoServidor.length; i++) {
+        if (listaDoServidor[i].title === titulo) return i
+    }
+}
+
+
+
 
 
 //     ----->>>>>     TELA DE CRIAÇÃO DE QUIZZES
+
 
 function adicionarPergunta () {
     var perguntaNova = {};
@@ -100,11 +134,8 @@ function adicionarQuizz () {                                                   /
 
 
 function mandarProServidor(novoQuizz) {                      // REFATORAR SE DER TEMPO
-    var configuraHeader = {
-        headers: {
-        "User-Token": tokenUsuario }
-    }
-    var requisicao = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v1/buzzquizz/quizzes',  novoQuizz, configuraHeader);
+    var header = configurarHeader();
+    var requisicao = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v1/buzzquizz/quizzes',  novoQuizz, header);
     requisicao.catch(exibirErro).then(fecharCriacao);             //
 }
 
@@ -116,20 +147,84 @@ function fecharCriacao () {
 }
 
 
+
+
+
+
+//     ----->>>>>     TELA DE PERGUNTAS
+
+
+function gerarQuizz () {
+    var telaDePerguntas = document.querySelector(".telaDePerguntas");
+    telaDePerguntas.querySelector("h1").innerText = quizzDaVez.title;
+
+    for (var i = 0; i < quizzDaVez.data.perguntas.length; i++) {
+        var elemento = document.createElement("div");
+        elemento.classList.add("perguntaAtual");
+        elemento.innerHTML = renderizarPerguntas(i);                               // MELHORAR ISSO MANDANDO A LISTA DE PERGUNTAS NO INDICE
+        telaDePerguntas.appendChild(elemento);
+    }
+}
+
+
+/*
+
+
+CRIAR UMA DIV <div class="perguntaAtual"> PARA CADA PERGUNTA DA LISTA  (quizzDaVez.data.perguntas.length)
+E DAR APPEND AQUI: <section class="telaDePerguntas">
+
+<div class="perguntaAtual">
+
+    <h2>Ninguém aguenta mais o jovem místico</h2>
+
+    <div class="alternativas">
+
+        CRIAR ESSE ARRAY ****** E CONCATENAR AQUI
+
+    </div>
+
+</div>
+
+
+
+*****
+
+
+
+//embaralharAlternativas()?? onde por?
+//renderizarPerguntas (i)
+//function renderizarImagens (i) {
+
+
+
+*/
+
+
+
+
+//botao.classList.toggle("desabilitarBotao"); LEMBRAR DESSA FUNÇÃO PARA DESABILITAR CLIQUES REPETIDOS NAS ALTERNATIVAS
+
 //     ----->>>>>     FUNCIONALIDADES GERAIS
+
+
+function configurarHeader () {
+    var header = {
+        headers: {
+        "User-Token": tokenUsuario }
+    }
+    return header;
+}
 
 function exibirErro (resposta) {
     console.log(resposta);
 }
 
-
 function mudarDeTela(classeSai,classeEntra) {
-    var sumir = document.querySelector(classeSai);           //Extrair
+    var sumir = document.querySelector(classeSai);           
     sumir.style.display = "none";
     var aparecer = document.querySelector(classeEntra);
     aparecer.style.display = "flex";
 }
-
 
 function limparInputs (classe) {
     var todosInpus = document.querySelectorAll(classe + " input");
@@ -147,27 +242,54 @@ function mudarIndice (classe,indice) {
 }
 
 
+function embaralharAlternativas(i) {
+    quizzDaVez.data.perguntas[i].opcoes.sort(comparador);
+}
+function comparador() { 
+	return Math.random() - 0.5; 
+}
+
+
+//     ----->>>>>     FUNÇÕES DE RENDERIZAÇÃO
+
+
+function renderizarListaDeQuizzes (nomeQuizz) {
+    var elemento = document.createElement("article");
+    elemento.setAttribute("onclick","carregarQuizz(this)");
+    elemento.innerText = nomeQuizz;
+    return elemento;
+}
+
+
+function renderizarImagens (i) {       // vou receber índice ou a lista de uma vez?    FAZER ASSIM E MUDAR NO FINAL SE DER CERTO
+    var htmlImagens = "";
+    embaralharAlternativas(i);
+    for (var j = 0; j < 4; j++) {
+        htmlImagens += "<figure><img src=" + quizzDaVez.data.perguntas[i].opcoes[j].imagem + ">";
+        htmlImagens += "<figcaption class=neutra " + quizzDaVez.data.perguntas[i].opcoes[j].classe + ">";
+        htmlImagens += quizzDaVez.data.perguntas[i].opcoes[j].resposta;
+        htmlImagens += "</figcaption></figure>";
+    }
+    return htmlImagens;
+}
+
+function renderizarPerguntas (i) {
+    var htmlPerguntas = "";
+    htmlPerguntas += "<h2>" + quizzDaVez.data.perguntas[i].titulo + "</h2>";
+    htmlPerguntas += "<div class='alternativas'>";
+    htmlPerguntas += renderizarImagens (i);
+    htmlPerguntas += "</div>";
+    return htmlPerguntas;
+}
 
 
 
 
 
+// <h2>Ninguém aguenta mais o jovem místico</h2>
 
-// LEMBRAR DE ZERAR VARIAVEIS LISTA DE PERGUNTAS E LISTAS DE NIVEIS
+// <div class="alternativas">
 
+//    CRIAR ESSE ARRAY ****** E CONCATENAR AQUI
 
-
-
-
-// "title": "Título do meu quizz",
-// 	"data": {
-// 		"perguntas": [{
-// 			"titulo": "Pergunta 1?",
-// 			"respostas": ["1", "2", "3", "4"]
-// 		}]
-// 	}
-
-
-
-//var str = "       Hello World!        ";
-//alert(str.trim());
+// </div>
