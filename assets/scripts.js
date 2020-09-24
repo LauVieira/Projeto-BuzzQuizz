@@ -150,9 +150,6 @@ function fecharCriacao () {
 
 
 
-
-
-
 //     ----->>>>>     TELA DE PERGUNTAS
 
 
@@ -169,7 +166,6 @@ function gerarQuizz () {
     var primeiraPergunta = telaDePerguntas.querySelector(".perguntaAtual:nth-child(3)");           //melhorar esse índice pra uma variável
     primeiraPergunta.style.display="flex";
 }
-
 
 
 function alternativaSelecionada (elementoFigure) {
@@ -203,8 +199,47 @@ function proximaPergunta () {
         indicePergunta++;
         mudarDeTela(".perguntaAtual:nth-child(" + indiceSai + ")",".perguntaAtual:nth-child(" + indicePergunta + ")");
     }
-    //e se for a última pergunta?? else finalizar quizz??
+    else setTimeout(finalizarQuizz,2000);
 }
+
+
+function finalizarQuizz () {
+    var scorePorcento = calcularScore();
+    var indiceNivel = descobrirIndice(scorePorcento);
+    gerarResultado(quizzDaVez.data.niveis[indiceNivel]);
+}
+
+
+function calcularScore () {
+    var totalPerguntas = quizzDaVez.data.perguntas.length;
+    var scorePorcento = Math.round(somaDePontos / totalPerguntas * 100);
+    return(scorePorcento);
+}
+
+function descobrirIndice (score) {
+    var niveis = quizzDaVez.data.niveis;
+    for (var i = 0; i < niveis.length; i++) {
+        var minimo = parseInt(niveis[i].minimo);
+        var maximo = parseInt(niveis[i].maximo);
+        if (score >= minimo && score <= maximo) return i;
+    }
+}
+
+
+
+
+//     ----->>>>>     TELA DE RESULTADO
+
+
+function gerarResultado (nivel) {
+    
+}
+
+
+
+
+
+
 
 
 
@@ -212,39 +247,12 @@ function proximaPergunta () {
 /*
 
 
-CRIAR UMA DIV <div class="perguntaAtual"> PARA CADA PERGUNTA DA LISTA  (quizzDaVez.data.perguntas.length)
-E DAR APPEND AQUI: <section class="telaDePerguntas">
-
-<div class="perguntaAtual">
-
-    <h2>Ninguém aguenta mais o jovem místico</h2>
-
-    <div class="alternativas">
-
-        ARRAY DE OPÇÕES
-
-    </div>
-
-</div>
 
 
-
-*****
-
-
-
-//embaralharAlternativas()?? onde por?
-//renderizarPerguntas (i)
-//function renderizarImagens (i) {
 
 
 
 */
-
-
-
-
-//botao.classList.toggle("desabilitarBotao"); LEMBRAR DESSA FUNÇÃO PARA DESABILITAR CLIQUES REPETIDOS NAS ALTERNATIVAS
 
 //     ----->>>>>     FUNCIONALIDADES GERAIS
 
@@ -325,14 +333,3 @@ function renderizarPerguntas (i) {
     return htmlPerguntas;
 }
 
-
-
-
-
-// <h2>Ninguém aguenta mais o jovem místico</h2>
-
-// <div class="alternativas">
-
-//    CRIAR ESSE ARRAY ****** E CONCATENAR AQUI
-
-// </div>
