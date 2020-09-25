@@ -1,18 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,400;1,500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
 
-/* 
+:root {
+    --larguraPadrao: 710px; 
+    --margemPadrao: 150px; 
+    --fontePadrao: 40px;
+}
 
-input[type="text"] { 
-    
-Criar variável para armazenar 60px?    
-    
-
-font-family: 'Merriweather', serif;
-
-
-
-*/
+@media (max-width: 600px) {
+    :root {
+        --larguraPadrao: 100%; 
+        --margemPadrao: 80px; 
+        --fontePadrao: 30px;
+    }
+    .opcoes,.porcentagemNivel {
+        flex-direction: column;
+    }
+    .caixaDescricaoResultado {
+        flex-direction: column;
+    }
+    .textoResultado,.caixaDescricaoResultado img {
+        width: 90%;
+        margin: 5px 0;
+    }
+    .telaDeCriacao,.telaDePerguntas,.telaDeResultado {
+        padding: 5px;
+    }
+}
 
 
 body {
@@ -26,7 +40,6 @@ body {
 
 .headerFixo {
     position: fixed;
-    display: block;
     top: 0;
     left: 0;
     height: 60px;
@@ -34,7 +47,7 @@ body {
     background: #3b3c5a;
     z-index: 1;
     color: #FFF;
-    font-size: 32px;
+    font-size: calc(0.75*var(--fontePadrao));
     font-weight: 700;
     padding: 14px;
 }
@@ -45,7 +58,6 @@ body {
 
 
 .telaDeLogin {
-    /* display: flex; */
     display: flex;
     height: 100vw;
     background: #FFF;
@@ -54,7 +66,7 @@ body {
     text-align: center;
 }
 .telaDeLogin h1 { 
-    font-size: 40px;
+    font-size: var(--fontePadrao);
     font-weight: 700;
     margin-top: 100px;
 }
@@ -99,16 +111,17 @@ body {
 /*    -----------                TELA DE QUIZZES                -----------    */
 
 .telaDeQuizzes {
-    /* display: flex; */
     display: none;
     justify-content: center;
 }
 
 .caixaDeQuizzes {
-    width: 960px;
-    margin-top: 200px;
+    width: 100%;
+    max-width: 960px;
+    margin-top: var(--margemPadrao);     
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .telaDeQuizzes button,article {
@@ -154,18 +167,14 @@ body {
 /*    -----------                TELA DE CRIAÇÃO DE QUIZZES                -----------    */
 
 .telaDeCriacao {
-    /* display: flex; */
     flex-direction: column;
     display: none;
-    width: 650px;
-    margin-top: 60px;
-    padding: 60px 0;
+    width: var(--larguraPadrao);
+    margin-top: var(--margemPadrao);
+    padding-bottom: calc(0.5*var(--margemPadrao));    
 }
 
 .telaDeCriacao input {
-    background: #FFF;
-    margin: 3px;
-    height: 30px;
     border-radius: 5px;
     padding-left: 5px;
     width: 100%;
@@ -193,11 +202,29 @@ body {
     align-items: center;
     margin-bottom: 60px;
 }
+.caixaDePerguntas input {
+    height: 30px;
+    margin: 3px;
+}
+.caixaDeNiveis input:not(#descricao) {
+    height: 30px;
+    margin: 3px;
+}
+.caixaDeNiveis #descricao {
+    height: 100px;
+    margin: 3px;
+    overflow-wrap: break-word;
+}
+.caixaDeNiveis input {
+    background: #FFF;
+}
 
 .tituloQuizz {
     display: block;
-    height: 40px;
+    height: 50px;
     border: solid 1px #dedfdc;
+    margin-bottom: 10px;
+    background: #FFF;
 }
 
 .opcoes {
@@ -220,6 +247,12 @@ body {
     padding: 5px;
     border-radius: 10px;
 }
+.perguntasRespostas > input {
+    background: #FFF;
+}
+.opcoes input::placeholder {
+    color: #FFF;
+}
 
 .telaDeCriacao ion-icon {
     font-size: 35px;
@@ -236,24 +269,25 @@ body {
 /*    -----------                TELA DE PERGUNTAS                -----------    */
 
 .telaDePerguntas {
-    width: 710px;
-    margin-top: 150px;
+    width: var(--larguraPadrao);
+    margin-top: var(--margemPadrao);
     display: none;
     flex-direction: column;
     justify-content: center;   
 }
 
 .telaDePerguntas h1 {
-    font-size: 40px;
+    font-size: var(--fontePadrao);
     font-family: 'Merriweather', serif;
     margin-bottom: 10px;
+    overflow-wrap: break-word;
 }
 
 .telaDePerguntas h2 {
     width: 100%;
-    font-size: 30px;
+    font-size: calc(0.75*var(--fontePadrao));
     font-family: 'Merriweather', serif;
-    padding: 40px;
+    padding: var(--fontePadrao);
     margin: 20px 0;
     background: #df9938;
 }
@@ -277,15 +311,17 @@ figure img {
     height: 175px;
 }
 figcaption {
-    font-size: 25px;
+    font-size: calc(0.65*var(--fontePadrao));
     padding: 20px 10px;
 }
 
 .correta {
     background: #348a5d;
+    color: #FFF;
 }
 .errada {
     background: #ad2c34;
+    color: #FFF;
 }
 .neutra {
     background: #dedfdc;
@@ -304,8 +340,8 @@ figcaption {
 
 .telaDeResultado {
     font-family: 'Merriweather', serif;
-    width: 710px;
-    margin-top: 150px;
+    width: var(--larguraPadrao);
+    margin-top: var(--margemPadrao);
     display: none;
     flex-direction: column;
     justify-content: center; 
@@ -317,28 +353,32 @@ figcaption {
 }
 
 .telaDeResultado h1 {
-    font-size: 40px;
+    font-size: var(--fontePadrao);
     margin-bottom: 10px;
+    overflow-wrap: break-word;
 }
 
 .telaDeResultado h2 {
     width: 100%;
-    font-size: 30px;
-    padding: 40px;
+    font-size: calc(0.75*var(--fontePadrao));
+    padding: var(--fontePadrao);
     margin: 20px 0;
     background: #df9938;
 }
 
 .telaDeResultado h3 {
-    font-size: 26px;
+    font-size: calc(0.65*var(--fontePadrao));
     margin-bottom: 15px;
 }
 
 .telaDeResultado p {
-    font-size: 22px;
+    font-size: calc(0.55*var(--fontePadrao));
+    
 }
 
-.textoResultado,.telaDeResultado img {
-    width: 50%;            /* ????????????? */
+.textoResultado,.caixaDescricaoResultado img {
+    width: 50%;    
 }
-
+.textoResultado {
+    overflow-wrap: break-word;
+}
