@@ -82,41 +82,64 @@ function encontrarIndice (titulo) {
 
 
 
-
-
 //     ----->>>>>     TELA DE CRIAÇÃO DE QUIZZES
 
 
-function adicionarPergunta () {
+function adicionarPergunta () {                                                   //refatorar
     var perguntaNova = {};
 
     var titulo = document.querySelector(".pergunta");
-    perguntaNova.titulo = titulo.value;
+    perguntaNova.titulo = garantirFormato(titulo.value);                    //EXTRAIR SE DER TEMPO
+    perguntaNova.titulo = perguntaNova.titulo.replaceAll("?","") + "?";                   //REFAZER LÓGICA
 
     perguntaNova.opcoes = [];
     for (var i = 1; i < 5; i++) {                         // EXTRAIR SE DER TEMPO
         var opcao = {};
         opcao.resposta = document.querySelector(".respostas input:nth-child(" + i +")").value;
+        opcao.resposta = garantirFormato(opcao.resposta);
         opcao.imagem = document.querySelector(".imagens input:nth-child(" + i +")").value;
         opcao.classe = "errada";
         if (i === 1) opcao.classe = "correta";
         perguntaNova.opcoes.push(opcao);
     }
-
+    console.log(perguntaNova);
     listaDePerguntas.push(perguntaNova);
     limparInputs(".caixaDePerguntas");
     mudarIndice(".caixaDePerguntas", listaDePerguntas.length);
 }
 
 
+function garantirFormato (texto) {
+    texto = texto.trim();
+    texto = texto.charAt(0).toUpperCase() + texto.slice(1);
+    texto=texto.replaceAll("  "," ");      // tratando espaçamento duplo acidental no meio da frase
+    texto=texto.replaceAll("  "," ");      // repetição para casos de espaçamento extra originalmente ímpar
+    return texto;
+}
+
+
+/* ORDEM LÓGICA DE VERIFICAÇÃO:  (Conjunto de todas as funções)
+function teste () {
+  var caixa = document.querySelector("input");
+  texto=caixa.value
+  texto = texto.trim();
+  texto = texto.charAt(0).toUpperCase() + texto.slice(1);
+  texto=texto.replaceAll("?","");
+  texto+="?";
+  texto=texto.replaceAll("  "," ");
+  texto=texto.replaceAll("  "," ");
+  alert(texto);
+}
+*/
+
 function adicionarNivel () {
     var nivelNovo = {};
     var todosInputs = document.querySelectorAll(".caixaDeNiveis input");
     nivelNovo.minimo = todosInputs[0].value;
     nivelNovo.maximo = todosInputs[1].value;
-    nivelNovo.titulo = todosInputs[2].value;
+    nivelNovo.titulo = garantirFormato(todosInputs[2].value);
     nivelNovo.imagem = todosInputs[3].value;
-    nivelNovo.descricao = todosInputs[4].value;
+    nivelNovo.descricao = garantirFormato(todosInputs[4].value);
     listaDeNiveis.push(nivelNovo);
     limparInputs(".caixaDeNiveis");
     mudarIndice(".caixaDeNiveis", listaDeNiveis.length);
@@ -207,6 +230,7 @@ function finalizarQuizz () {
     var scorePorcento = calcularScore();
     var indiceNivel = descobrirIndice(scorePorcento);
     gerarResultado(quizzDaVez.data.niveis[indiceNivel]);
+    mudarDeTela(".telaDePerguntas",".telaDeResultado");
 }
 
 
@@ -227,32 +251,16 @@ function descobrirIndice (score) {
 
 
 
-
 //     ----->>>>>     TELA DE RESULTADO
 
 
 function gerarResultado (nivel) {
-    
+    var telaDeResultado = document.querySelector(".telaDeResultado");
+    renderizarResultado(telaDeResultado,nivel);
 }
 
 
 
-
-
-
-
-
-
-
-/*
-
-
-
-
-
-
-
-*/
 
 //     ----->>>>>     FUNCIONALIDADES GERAIS
 
@@ -300,6 +308,7 @@ function comparador() {
 }
 
 
+
 //     ----->>>>>     FUNÇÕES DE RENDERIZAÇÃO
 
 
@@ -333,3 +342,20 @@ function renderizarPerguntas (i) {
     return htmlPerguntas;
 }
 
+function renderizarResultado(secao,nivel) {
+    var score = calcularScore()+"%";
+    var texto = "";
+    console.log(nivel);
+    texto += "<header class='headerFixo'>BuzzQuizz</header>";
+    texto += "<h1>" + quizzDaVez.title + "</h1>";
+    texto += "<h2>Você acertou " + somaDePontos + " de " + quizzDaVez.data.perguntas.length + " perguntas!<br>";
+    texto += "Score: " + score + "</h2>";
+    texto += "<div class='caixaDescricaoResultado'>";
+    texto += "<div class='textoResultado'>";
+    texto += "<h3>" + nivel.titulo + "</h3>";
+    texto += "<p>" + nivel.descricao + "</p>";
+    texto += "</div";
+    texto += "<img src=" + nivel.imagem + ">";
+    texto += "</div>";
+    secao.innerHTML = texto;
+}

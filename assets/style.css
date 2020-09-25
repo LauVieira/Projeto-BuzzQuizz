@@ -245,12 +245,14 @@ body {
 
 .telaDePerguntas h1 {
     font-size: 40px;
+    font-family: 'Merriweather', serif;
     margin-bottom: 10px;
 }
 
 .telaDePerguntas h2 {
     width: 100%;
     font-size: 30px;
+    font-family: 'Merriweather', serif;
     padding: 40px;
     margin: 20px 0;
     background: #df9938;
@@ -301,7 +303,8 @@ figcaption {
 
 
 .telaDeResultado {
-    width: 600px;
+    font-family: 'Merriweather', serif;
+    width: 710px;
     margin-top: 150px;
     display: none;
     flex-direction: column;
@@ -336,6 +339,6 @@ figcaption {
 }
 
 .textoResultado,.telaDeResultado img {
-    width: 50%;
+    width: 50%;            /* ????????????? */
 }
 
