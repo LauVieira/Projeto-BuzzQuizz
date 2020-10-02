@@ -7,7 +7,6 @@
     --fontePadrao: 40px;
 }
 
-
 body {
     font-family: 'Roboto', sans-serif;
     background: #FFF;
@@ -15,7 +14,6 @@ body {
     display: flex;
     justify-content: center;
 }
-
 
 .headerFixo {
     position: fixed;
@@ -32,9 +30,7 @@ body {
 }
 
 
-
 /*    -----------                TELA DE LOGIN                -----------    */
-
 
 .telaDeLogin {
     display: flex;
@@ -72,7 +68,6 @@ body {
     text-align: left;
     padding-left: 10px;
 }
-
 .caixaDeLogin button {
     background: #3b3c5a;
     margin-top: 5px;
@@ -83,8 +78,7 @@ body {
 
 .desabilitarBotao {
     pointer-events: none;
-  } 
-
+} 
 
 
 /*    -----------                TELA DE QUIZZES                -----------    */
@@ -118,7 +112,6 @@ body {
     line-height: 25px;
     text-align: center;
 }
-
 .telaDeQuizzes article {
     background: #df9938;
 }
@@ -139,8 +132,6 @@ body {
     font-size: 45px;
     margin-bottom: 10px;
 }
-
-
 
 
 /*    -----------                TELA DE CRIAÇÃO DE QUIZZES                -----------    */
@@ -181,9 +172,13 @@ body {
     align-items: center;
     margin-bottom: calc(1.5*var(--fontePadrao));
 }
+
 .caixaDePerguntas input {
     height: 30px;
     margin: 3px;
+}
+.caixaDeNiveis input {
+    background: #FFF;
 }
 .caixaDeNiveis input:not(#descricao) {
     height: 30px;
@@ -193,9 +188,6 @@ body {
     height: 100px;
     margin: 3px;
     overflow-wrap: break-word;
-}
-.caixaDeNiveis input {
-    background: #FFF;
 }
 
 .tituloQuizz {
@@ -226,6 +218,7 @@ body {
     padding: 5px;
     border-radius: 10px;
 }
+
 .perguntasRespostas > input {
     background: #FFF;
 }
@@ -242,7 +235,6 @@ body {
     display: flex;
     width: 100%;
 }
-
 
 
 /*    -----------                TELA DE PERGUNTAS                -----------    */
@@ -317,7 +309,6 @@ figcaption {
 
 /*    -----------                TELA DE RESULTADOS                -----------    */
 
-
 .telaDeResultado {
     font-family: 'Merriweather', serif;
     width: var(--larguraPadrao);
@@ -326,7 +317,6 @@ figcaption {
     flex-direction: column;
     justify-content: center; 
 }
-
 
 .caixaDescricaoResultado {
     display: flex;
@@ -354,14 +344,14 @@ figcaption {
 
 .telaDeResultado p {
     font-size: calc(0.55*var(--fontePadrao));
-    
 }
 
 .textoResultado,.caixaDescricaoResultado img {
     width: 50%;    
 }
-.textoResultado {
+.textoResultado h3,.textoResultado p {
     overflow-wrap: break-word;
+    padding-right: 2px;
 }
 
 

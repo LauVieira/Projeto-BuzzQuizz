@@ -1,24 +1,24 @@
 var tokenUsuario
 var listaDePerguntas = [];
 var listaDeNiveis = [];
-var listaDoServidor = [];      //precisa ser global?
+var listaDoServidor = [];  
 var quizzDaVez;
 var indicePergunta = 3;
 var somaDePontos = 0;
 
 
-//     ----->>>>>     TELA DE LOGIN
-
 function pegarDadosUsuario () {
-    var objetoUsuario={};
+    var objetoUsuario = {};
     objetoUsuario.email = document.querySelector("#email").value;
     objetoUsuario.password = document.querySelector("#senha").value;
+
     if (objetoUsuario.email !== "" && objetoUsuario.password !== "") {
         enviarUsuario(objetoUsuario);
     } else {
-        alert ("Por favor, insira dados válidos");
+        alert("Por favor, insira dados válidos");
     }
 }
+
 
 function enviarUsuario (objetoUsuario) {
     desabilitarHabilitarBotao();
@@ -26,16 +26,18 @@ function enviarUsuario (objetoUsuario) {
     requisicaoPost.catch(erroUsuario).then(processarUsuario);
 }
 
+
 function erroUsuario (resposta) {
-    console.log(resposta);
-    alert ("Email e/ou senha incorretos, tente novamente");
+    alert("Email e/ou senha incorretos, tente novamente");
     desabilitarHabilitarBotao();
 }
+
 
 function desabilitarHabilitarBotao () {
     var botao = document.querySelector(".caixaDeLogin button");
     botao.classList.toggle("desabilitarBotao");
 }
+
 
 function processarUsuario (resposta) {
     tokenUsuario = resposta.data.token;
@@ -44,17 +46,21 @@ function processarUsuario (resposta) {
 }
 
 
+
 //     ----->>>>>     TELA DE QUIZZES
+
 
 function criarQuizz () {
     mudarDeTela(".telaDeQuizzes",".telaDeCriacao");
 }
 
+
 function pedirQuizzes () {
     var header = configurarHeader();
-    var requisicao = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v1/buzzquizz/quizzes', header);
+    var requisicao = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v1/buzzquizz/quizzes',header);
     requisicao.catch(exibirErro).then(carregarQuizzes);
 }
+
 
 function carregarQuizzes (resposta) {
     listaDoServidor = resposta.data;
@@ -63,12 +69,13 @@ function carregarQuizzes (resposta) {
     carregarTela(caixaDeQuizzes);
 }
 
+
 function carregarTela (caixaDeQuizzes) {
-    caixaDeQuizzes.appendChild(renderizarOpcaoCriar())
+    caixaDeQuizzes.appendChild(renderizarOpcaoCriar());
+
     for (var i = 0; i < listaDoServidor.length; i++) {
-        console.log(listaDoServidor[i].id);
         var textoTitulo = listaDoServidor[i].title;
-        caixaDeQuizzes.appendChild(renderizarListaDeQuizzes(textoTitulo));     // DEIXAR MAIS CURTO OU FAZER MAIS LEGÍVEL?
+        caixaDeQuizzes.appendChild(renderizarListaDeQuizzes(textoTitulo));  
     }
 }
 
@@ -76,7 +83,6 @@ function carregarTela (caixaDeQuizzes) {
 function carregarQuizz (quizz) {
     var indiceQuizz = encontrarIndice(quizz.innerText);
     quizzDaVez = listaDoServidor[indiceQuizz];
-    console.log(quizzDaVez);
     gerarQuizz();
     mudarDeTela(".telaDeQuizzes",".telaDePerguntas");    
 }
@@ -84,7 +90,7 @@ function carregarQuizz (quizz) {
 
 function encontrarIndice (titulo) {
     for (var i = 0; i < listaDoServidor.length; i++) {
-        if (listaDoServidor[i].title === titulo) return i
+        if (listaDoServidor[i].title === titulo) return i;
     }
 }
 
@@ -93,26 +99,49 @@ function encontrarIndice (titulo) {
 //     ----->>>>>     TELA DE CRIAÇÃO DE QUIZZES
 
 
-function adicionarPergunta () {                                                   //refatorar        //REFATORAR PRA CARAMBA
+function adicionarPergunta () {                           
     var perguntaNova = {};
-
     var titulo = document.querySelector(".pergunta");
-    perguntaNova.titulo = garantirFormato(titulo.value);                    //EXTRAIR SE DER TEMPO
-    perguntaNova.titulo = perguntaNova.titulo.replaceAll("?","") + "?";                   //REFAZER LÓGICA
+    perguntaNova.titulo = garantirFormato(titulo.value);      
 
+    if (verificarPergunta(perguntaNova.titulo)) {
+        perguntaNova.opcoes = pegarAlternativas(perguntaNova);
+        listaDePerguntas.push(perguntaNova);
+        limparInputs(".caixaDePerguntas");
+        mudarIndice(".caixaDePerguntas",listaDePerguntas.length);
+    }
+    else {
+        alert ("Por favor, corrija sua pergunta");
+
+        return;
+    }
+}
+
+
+function pegarAlternativas (perguntaNova) {
     perguntaNova.opcoes = [];
-    for (var i = 1; i < 5; i++) {                         // EXTRAIR SE DER TEMPO
+
+    for (var i = 1; i < 5; i++) {       
         var opcao = {};
+
         opcao.resposta = document.querySelector(".respostas input:nth-child(" + i +")").value;
         opcao.resposta = garantirFormato(opcao.resposta);
         opcao.imagem = document.querySelector(".imagens input:nth-child(" + i +")").value;
         opcao.classe = "errada";
         if (i === 1) opcao.classe = "correta";
+
         perguntaNova.opcoes.push(opcao);
     }
-    listaDePerguntas.push(perguntaNova);
-    limparInputs(".caixaDePerguntas");
-    mudarIndice(".caixaDePerguntas", listaDePerguntas.length);
+
+    return perguntaNova.opcoes;
+}
+
+
+function verificarPergunta (texto) {
+    var posicaoUnica = texto.indexOf("?") === texto.lastIndexOf("?");
+    var posicaoUltima = texto.indexOf("?") === (texto.length - 1);
+    
+    return (posicaoUltima && posicaoUnica);
 }
 
 
@@ -121,55 +150,47 @@ function garantirFormato (texto) {
     texto = texto.toLowerCase();
     texto = texto.charAt(0).toUpperCase() + texto.slice(1);
     texto=texto.replaceAll("  "," ");      // tratando espaçamento duplo acidental no meio da frase
-    texto=texto.replaceAll("  "," ");      // repetição para casos de espaçamento extra originalmente ímpar
+    texto=texto.replaceAll("  "," ");      // repetição para casos de espaçamento acidental originalmente ímpar
+   
     return texto;
 }
 
 
-/* ORDEM LÓGICA DE VERIFICAÇÃO:  (Conjunto de todas as funções)
-function teste () {
-  var caixa = document.querySelector("input");
-  texto=caixa.value
-  texto = texto.trim();
-  texto = texto.charAt(0).toUpperCase() + texto.slice(1);
-  texto=texto.replaceAll("?","");
-  texto+="?";
-  texto=texto.replaceAll("  "," ");
-  texto=texto.replaceAll("  "," ");
-  alert(texto);
-}
-*/
-
 function adicionarNivel () {
     var nivelNovo = {};
     var todosInputs = document.querySelectorAll(".caixaDeNiveis input");
+
     nivelNovo.minimo = todosInputs[0].value;
     nivelNovo.maximo = todosInputs[1].value;
     nivelNovo.titulo = garantirFormato(todosInputs[2].value);
     nivelNovo.imagem = todosInputs[3].value;
     nivelNovo.descricao = garantirFormato(todosInputs[4].value);
     listaDeNiveis.push(nivelNovo);
+
     limparInputs(".caixaDeNiveis");
     mudarIndice(".caixaDeNiveis", listaDeNiveis.length);
 }
 
 
-function adicionarQuizz () {                                                   //REFATORAR SE DER TEMPO
+function adicionarQuizz () {                                              
     var novoQuizz = {};
     var tituloQuizz = document.querySelector(".tituloQuizz").value;
-    novoQuizz.title = garantirFormato(tituloQuizz);              //
-    novoQuizz.title = novoQuizz.title.replaceAll("?","") + "?";   //
+
+    novoQuizz.title = garantirFormato(tituloQuizz);              
+    novoQuizz.title = novoQuizz.title.replaceAll("?","") + "?";  
+     
     novoQuizz.data = {};
     novoQuizz.data.perguntas = listaDePerguntas;
     novoQuizz.data.niveis = listaDeNiveis;
+
     mandarProServidor(novoQuizz);
 }
 
 
-function mandarProServidor(novoQuizz) {                      // REFATORAR SE DER TEMPO
+function mandarProServidor (novoQuizz) {                 
     var header = configurarHeader();
-    var requisicao = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v1/buzzquizz/quizzes',  novoQuizz, header);
-    requisicao.catch(exibirErro).then(fecharCriacao);             //
+    var requisicao = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v1/buzzquizz/quizzes',novoQuizz,header);
+    requisicao.catch(exibirErro).then(fecharCriacao);            
 }
 
 
@@ -189,19 +210,24 @@ function gerarQuizz () {
     var telaDePerguntas = document.querySelector(".telaDePerguntas");
     telaDePerguntas.querySelector("h1").innerText = quizzDaVez.title;
     telaDePerguntas = gerarPerguntas(telaDePerguntas);
+
     var primeiraPergunta = telaDePerguntas.querySelector(".perguntaAtual:nth-child(" + indicePergunta + ")");
-    primeiraPergunta.style.display="flex";
+    primeiraPergunta.style.display = "flex";
 }
+
 
 function gerarPerguntas (telaDePerguntas) {
     for (var i = 0; i < quizzDaVez.data.perguntas.length; i++) {
         var elemento = document.createElement("div");
         elemento.classList.add("perguntaAtual");  
-        elemento.innerHTML = renderizarPerguntas(i);                               // MELHORAR ISSO MANDANDO A LISTA DE PERGUNTAS NO INDICE
+        elemento.innerHTML = renderizarPerguntas(i);  
+
         telaDePerguntas.appendChild(elemento);
     }
+
     return telaDePerguntas;
 }
+
 
 function alternativaSelecionada (elementoFigure) {
     revelarCores(elementoFigure);
@@ -209,15 +235,18 @@ function alternativaSelecionada (elementoFigure) {
     setTimeout(proximaPergunta,2000);    
 }
 
+
 function revelarCores (elementoFigure) {
-    var alternativas = elementoFigure.parentNode;    //pegando a div mãe
+    var alternativas = elementoFigure.parentNode;    
     removerClick = alternativas.querySelectorAll("figure");
     alternativas = alternativas.querySelectorAll("figure figcaption");
+
     for (var i = 0; i < 4; i++) {
         alternativas[i].classList.remove("neutra");
         removerClick[i].removeAttribute("onclick");
     }
 }
+
 
 function checarPonto (elementoFigure) {
     var classe = elementoFigure.querySelector("figcaption");
@@ -228,6 +257,7 @@ function checarPonto (elementoFigure) {
 
 function proximaPergunta () {
     var indiceMaximo = quizzDaVez.data.perguntas.length + 2;
+
     if (indicePergunta < indiceMaximo) {
         var indiceSai = indicePergunta;
         indicePergunta++;
@@ -245,16 +275,21 @@ function finalizarQuizz () {
 }
 
 
+
 //     ----->>>>>     TELA DE RESULTADO
+
 
 function calcularScore () {
     var totalPerguntas = quizzDaVez.data.perguntas.length;
     var scorePorcento = Math.round(somaDePontos / totalPerguntas * 100);
+
     return(scorePorcento);
 }
 
+
 function descobrirIndice (score) {
     var niveis = quizzDaVez.data.niveis;
+
     for (var i = 0; i < niveis.length; i++) {
         var minimo = parseInt(niveis[i].minimo);
         var maximo = parseInt(niveis[i].maximo);
@@ -262,11 +297,11 @@ function descobrirIndice (score) {
     }
 }
 
+
 function gerarResultado (nivel) {
     var telaDeResultado = document.querySelector(".telaDeResultado");
     renderizarResultado(telaDeResultado,nivel);
 }
-
 
 
 
@@ -278,19 +313,23 @@ function configurarHeader () {
         headers: {
         "User-Token": tokenUsuario }
     }
+
     return header;
 }
+
 
 function exibirErro (resposta) {
     console.log(resposta);
 }
 
-function mudarDeTela(classeSai,classeEntra) {
+
+function mudarDeTela (classeSai,classeEntra) {
     var sumir = document.querySelector(classeSai);           
     sumir.style.display = "none";
     var aparecer = document.querySelector(classeEntra);
     aparecer.style.display = "flex";
 }
+
 
 function limparInputs (classe) {
     var todosInpus = document.querySelectorAll(classe + " input");
@@ -299,19 +338,20 @@ function limparInputs (classe) {
     }
 }
 
+
 function mudarIndice (classe,indice) {
     indice++;
     var indiceP = document.querySelector(classe + " p");
     var texto = indiceP.innerText;
-    texto = texto.slice(0, -1) + indice;
+    texto = texto.slice(0,-1) + indice;
     indiceP.innerText = texto;
 }
 
 
-function embaralharAlternativas(i) {
+function embaralharAlternativas (i) {
     quizzDaVez.data.perguntas[i].opcoes.sort(comparador);
 }
-function comparador() { 
+function comparador () { 
 	return Math.random() - 0.5; 
 }
 
@@ -324,44 +364,52 @@ function renderizarListaDeQuizzes (nomeQuizz) {
     var elemento = document.createElement("article");
     elemento.setAttribute("onclick","carregarQuizz(this)");
     elemento.innerText = nomeQuizz;
+
     return elemento;
 }
 
 
-function renderizarImagens (i) {       // vou receber índice ou a lista de uma vez?    FAZER ASSIM E MUDAR NO FINAL SE DER CERTO
+function renderizarImagens (i) {  
     var htmlImagens = "";
     embaralharAlternativas(i);
+
     for (var j = 0; j < 4; j++) {
         htmlImagens += "<figure onclick='alternativaSelecionada(this)'><img src=" + quizzDaVez.data.perguntas[i].opcoes[j].imagem + ">";
         htmlImagens += "<figcaption class='neutra " + quizzDaVez.data.perguntas[i].opcoes[j].classe + "' >";
         htmlImagens += quizzDaVez.data.perguntas[i].opcoes[j].resposta;
         htmlImagens += "</figcaption></figure>";
     }
+
     return htmlImagens;
 }
+
 
 function renderizarOpcaoCriar () {
     var elemento = document.createElement("button");
     elemento.setAttribute("onclick","criarQuizz()");
     elemento.innerHTML = "<span>Novo Quizz</span><ion-icon name='add-circle-sharp'></ion-icon>";
+
     return elemento;
 }
+
 
 function renderizarPerguntas (i) {
     var htmlPerguntas = "";
     var indiceH2 = i+1;
+
     htmlPerguntas += "<h2>" + indiceH2 + ". " + quizzDaVez.data.perguntas[i].titulo + "</h2>";
     htmlPerguntas += "<div class='alternativas'>";
     htmlPerguntas += renderizarImagens (i);
     htmlPerguntas += "</div>";
+
     return htmlPerguntas;
 }
 
-function renderizarResultado(secao,nivel) {
+
+function renderizarResultado (secao,nivel) {
     var score = calcularScore()+"%";
     var texto = "";
-    var verificacao = "<img src='" + nivel.imagem + "'>";
-    console.log(verificacao);
+
     texto += "<header class='headerFixo'>BuzzQuizz</header>";
     texto += "<h1>" + quizzDaVez.title + "</h1>";
     texto += "<h2>Você acertou " + somaDePontos + " de " + quizzDaVez.data.perguntas.length + " perguntas!<br>";
@@ -373,7 +421,6 @@ function renderizarResultado(secao,nivel) {
     texto += "</div>";
     texto += "<img src='" + nivel.imagem + "'>";
     texto += "</div>";
-    console.log(texto);
+
     secao.innerHTML = texto;
-    console.log(secao.innerHTML);
 }
